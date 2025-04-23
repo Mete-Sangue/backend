@@ -1,15 +1,24 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ReceptorService } from './receptor.service';
 import { CreateReceptorDto } from './dto/create-receptor.dto';
 import { UpdateReceptorDto } from './dto/update-receptor.dto';
+import { Receptor } from '@prisma/client';
 
 @Controller('receptor')
 export class ReceptorController {
   constructor(private readonly receptorService: ReceptorService) {}
 
   @Post()
-  create(@Body() createReceptorDto: CreateReceptorDto) {
-    return this.receptorService.create(createReceptorDto);
+  create(@Body() data: Receptor) {
+    return this.receptorService.create(data);
   }
 
   @Get()
@@ -23,8 +32,8 @@ export class ReceptorController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReceptorDto: UpdateReceptorDto) {
-    return this.receptorService.update(+id, updateReceptorDto);
+  update(@Param('id') id: string, @Body() updateReceptorDto: Receptor) {
+    return this.receptorService.update(updateReceptorDto);
   }
 
   @Delete(':id')

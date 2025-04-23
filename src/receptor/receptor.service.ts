@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateReceptorDto } from './dto/create-receptor.dto';
 import { UpdateReceptorDto } from './dto/update-receptor.dto';
-import { PrismaService } from '../prisma.service';
 import { Receptor, Prisma } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ReceptorService {

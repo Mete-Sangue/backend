@@ -17,7 +17,7 @@ export class ReceptorController {
   constructor(private readonly receptorService: ReceptorService) {}
 
   @Post()
-  create(@Body() data: Receptor) {
+  create(@Body() data: CreateReceptorDto) {
     return this.receptorService.create(data);
   }
 

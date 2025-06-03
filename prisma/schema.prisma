@@ -15,8 +15,8 @@ datasource db {
 }
 
 model Usuario {
-  id             Int       @id @default(autoincrement())
-  email          String    @unique
+  id             Int        @id @default(autoincrement())
+  email          String     @unique
   nomeCompleto   String
   senha          String
   tipoSanguineo  String
@@ -25,6 +25,7 @@ model Usuario {
   cep            String
   doadorAtivo    Boolean
   ultimaDoacao   DateTime?
+  receptores     Receptor[]
 }
 
 model Receptor {
@@ -36,4 +37,7 @@ model Receptor {
   quantidade        String
   documentoReceptor String
   telefone          String
+
+  usuarioId Int // Campo para armazenar o ID do Usuario (FK)
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade) // Define a relação
 }

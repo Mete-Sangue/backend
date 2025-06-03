@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class ReceptorService {
   constructor(private prisma: PrismaService) {}
-  create(createReceptorDto: Receptor) {
+  create(createReceptorDto: CreateReceptorDto) {
     return this.prisma.receptor.create({
       data: createReceptorDto,
     });

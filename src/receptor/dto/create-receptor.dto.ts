@@ -1,15 +1,12 @@
+import { Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
   MinLength,
   Matches,
-  IsInt, // Importado para validar números inteiros
-  Min, // Importado para validar o valor mínimo de um número
+  IsInt,
+  Min,
 } from 'class-validator';
-// Se você precisar converter automaticamente strings para números para o usuarioId
-// (por exemplo, se vier de um parâmetro de rota como string),
-// você pode usar @Type(() => Number) do class-transformer.
-// import { Type } from 'class-transformer';
 
 export class CreateReceptorDto {
   @IsString({ message: 'O CPF deve ser uma string.' })
@@ -31,13 +28,13 @@ export class CreateReceptorDto {
   @IsNotEmpty({ message: 'O nome do hospital não pode estar vazio.' })
   hospital: string;
 
-  @IsString({ message: 'A quantidade deve ser uma string.' }) // Mantido como string conforme original
+  @IsString({ message: 'A quantidade deve ser uma string.' })
   @IsNotEmpty({ message: 'A quantidade não pode estar vazia.' })
   quantidade: string;
 
   @IsString({ message: 'O documento do receptor deve ser uma string.' })
   @IsNotEmpty({ message: 'O documento do receptor não pode estar vazio.' })
-  documentoReceptor: string; // Pode ser um link, nome de arquivo, etc.
+  documentoReceptor: string;
 
   @IsString({ message: 'O telefone deve ser uma string.' })
   @IsNotEmpty({ message: 'O telefone não pode estar vazio.' })
@@ -46,10 +43,9 @@ export class CreateReceptorDto {
   })
   telefone: string;
 
-  // Novo campo para a chave estrangeira do usuário
   @IsInt({ message: 'O ID do usuário deve ser um número inteiro.' })
   @IsNotEmpty({ message: 'O ID do usuário não pode estar vazio.' })
-  @Min(1, { message: 'O ID do usuário deve ser um número positivo.' }) // Assumindo que IDs são > 0
-  // @Type(() => Number) // Descomente se o usuarioId puder vir como string e precisar de conversão
+  @Min(1, { message: 'O ID do usuário deve ser um número positivo.' })
+  @Type(() => Number)
   usuarioId: number;
 }

@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  Put,
+  Request,
 } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
@@ -22,5 +24,11 @@ export class UsuarioController {
   @Get()
   getByDoadorAtivo() {
     return this.usuarioService.findAllByDoadorAtivo();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put()
+  update(@Request() req, @Body() updateUserDto: UpdateUsuarioDto) {
+    return this.usuarioService.update(req.user.id, updateUserDto);
   }
 }

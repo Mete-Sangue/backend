@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Usuario as PrismaUser, Prisma } from '@prisma/client';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Usuario } from './entities/usuario.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioService {
@@ -19,8 +20,6 @@ export class UsuarioService {
       where: { id },
     });
     if (!user) {
-      // Lançar exceção aqui ou deixar o JwtStrategy/AuthService lidar com null
-      // throw new NotFoundException(`Usuário com ID "${id}" não encontrado.`);
       return null;
     }
     return user;
@@ -38,5 +37,29 @@ export class UsuarioService {
     return this.prisma.usuario.create({
       data,
     });
+  }
+
+  async update(id: number, updateUserDto: UpdateUsuarioDto) {
+    if (updateUserDto.senha) {
+      const salt = await bcrypt.genSalt();
+      updateUserDto.senha = await bcrypt.hash(updateUserDto.senha, salt);
+    }
+
+    try {
+      const user = await this.prisma.usuario.update({
+        where: { id },
+        data: updateUserDto,
+      });
+
+      const { senha, ...result } = user;
+      return result;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(
+          `Utilizador com o ID ${id} não encontrado.`,
+        );
+      }
+      throw error;
+    }
   }
 }

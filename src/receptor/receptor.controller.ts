@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ReceptorService } from './receptor.service';
 import { CreateReceptorDto } from './dto/create-receptor.dto';
@@ -31,6 +32,12 @@ export class ReceptorController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('user')
+  findAllByUser(@Request() req) {
+    return this.receptorService.findAllByUser(req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.receptorService.findOne(+id);
@@ -38,13 +45,17 @@ export class ReceptorController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReceptorDto: Receptor) {
-    return this.receptorService.update(updateReceptorDto);
+  update(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() updateReceptorDto: Receptor,
+  ) {
+    return this.receptorService.update(updateReceptorDto, req.user.id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.receptorService.remove(+id);
+  remove(@Request() req, @Param('id') id: string) {
+    return this.receptorService.remove(+id, req.user.id);
   }
 }
